@@ -1,88 +1,31 @@
 import { APIGatewayEvent, Callback, Context } from "aws-lambda";
-import {
-  OK,
-  BAD_REQUEST,
-  INTERNAL_SERVER_ERROR,
-  UNAUTHORIZED,
-} from "http-status";
+import { OK, BAD_REQUEST } from "http-status";
 import axios from "axios";
-import {
-  Role,
-  User,
-  Group,
-  UserTg,
-  ChatTg,
-  UpdateTg,
-  ChatTypeTg,
-} from "../../models";
-import usersDynamoService from "../../services/dynamoUsersServices";
-import groupsDynamoServices from "../../services/dynamoGroupsServices";
-import commandsDynamoServices from "../../services/dynamoCommandsServices";
-import { getCommandKey, hasCommand } from "../../utils/telegramHelper";
+import { UpdateTg } from "../../lib/models";
+import { getCommand } from "../../lib/utils/telegramHelper";
 
-const putUser = async (from: UserTg) => {
-  try {
-    const currentUser = await usersDynamoService.getById(from?.id);
-    if (!currentUser) {
-      return usersDynamoService.create(from);
-    }
-
-    const user: User = { ...currentUser, username: from?.username };
-    return usersDynamoService.update(user);
-  } catch (error) {
-    console.error(`telegram_webhook.putUser: ${error?.message}`, error);
-  }
-};
-
-const putGroup = async (chat: ChatTg) => {
-  if (chat?.type === ChatTypeTg.PRIVATE) {
+const sendToEndpointCommand = async (body: UpdateTg, key: string) => {
+  const command = {
+    endpoint: "https://c11eba33cf72d4a0e912aa5f0ed702ca.m.pipedream.net",
+    key,
+  };
+  if (command?.endpoint === "") {
     return;
   }
 
-  try {
-    const foundGroup = await groupsDynamoServices.getById(chat?.id);
-    if (!foundGroup) {
-      return groupsDynamoServices.create(chat);
-    }
-
-    const group: Group = { ...foundGroup, title: chat?.title };
-    return groupsDynamoServices.update(group);
-  } catch (error) {
-    console.error(`telegram_webhook.putGroup: ${error?.message}`, error);
-  }
-};
-
-const sendToEndpointCommand = async (body: UpdateTg) => {
-  const { offset, length } = getCommandKey(body);
-  const commandInMessage = body?.message?.text?.substring(offset, length);
-  const command = await commandsDynamoServices.get(commandInMessage);
-  if (!command?.endpoint) {
-    return;
-  }
-
-  try {
-    await axios.post(command?.endpoint, body);
-  } catch (error) {
-    console.error(
-      `telegram_webhook: POST ${command?.endpoint} - ${error?.message}`
-    );
-  }
+  await axios.post(command?.endpoint, body);
 };
 
 export const execute = async (
   body: UpdateTg
-): Promise<{ statusCode: number; body?: string }> => {
-  await Promise.all([
-    putUser(body?.message?.from),
-    putGroup(body?.message?.chat),
-  ]);
-
+): Promise<{ statusCode: number }> => {
   if (body?.message?.from?.is_bot) {
     return { statusCode: OK };
   }
 
-  if (hasCommand(body)) {
-    await sendToEndpointCommand(body);
+  const key = getCommand(body);
+  if (key) {
+    await sendToEndpointCommand(body, key);
   }
 
   return { statusCode: OK };
@@ -93,35 +36,11 @@ export const telegramWebhook = async (
   _context: Context,
   callback: Callback
 ): Promise<void> => {
-  try {
-    const { id, apiKey } = event?.queryStringParameters ?? {};
-
-    const user = await usersDynamoService.get(`${id}`);
-    if (
-      !user?.role ||
-      user?.apiKey !== apiKey ||
-      ![Role.ROOT, Role.ADMIN, Role.SERVICE].includes(user?.role)
-    ) {
-      throw new Error("Unauthorized");
-    }
-  } catch (error) {
-    return callback(null, { statusCode: UNAUTHORIZED });
-  }
-
   if (!event?.body) {
     return callback(null, { statusCode: BAD_REQUEST });
   }
 
-  try {
-    const body = JSON.parse(event?.body);
-    console.log("telegram_webhook body:\n", JSON.stringify(body, null, 2));
-    const response = await execute(body);
-    return callback(null, response);
-  } catch (error) {
-    console.error(`telegram_webhook.telegramWebhook: ${error?.message}`, error);
-    return callback(error, {
-      statusCode: INTERNAL_SERVER_ERROR,
-      body: error.message,
-    });
-  }
+  const body = JSON.parse(event?.body);
+  const response = await execute(body);
+  return callback(null, response);
 };

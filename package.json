@@ -9,9 +9,7 @@
     "dev:deploy": "sls deploy --stage dev --verbose",
     "dev:destroy": "sls remove --stage dev --verbose",
     "local:telegramSetWebhook": "sls invoke local -f telegramSetWebhook -p mock_events/event_telegram_set_webhook.json --stage dev",
-    "local:methodsUsers": "sls invoke local -f dynamoDBUsersCrud -p mock_events/event_dynamo_users_crud.json --stage dev",
-    "local:telegramWebhook": "sls invoke local -f telegramWebhook -p mock_events/event_telegram_webhook.json --stage dev",
-    "local:methodsCommands": "sls invoke local -f dynamoDBCommandsCrud -p mock_events/event_dynamo_commands_create.json --stage dev"
+    "local:telegramWebhook": "sls invoke local -f telegramWebhook -p mock_events/event_telegram_webhook.json --stage dev"
   },
   "repository": {
     "type": "git",

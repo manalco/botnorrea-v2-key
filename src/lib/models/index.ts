@@ -1,4 +1,4 @@
-export { Role, Command, Group, User } from "./Botnorrea";
+export { Role, Command, Group, User } from "./botnorrea";
 export {
   ChatTg,
   ChatTypeTg,
@@ -7,4 +7,4 @@ export {
   UpdateTg,
   UserTg,
   FormattingOptionsTg,
-} from "./Telegram";
+} from "./telegram";
