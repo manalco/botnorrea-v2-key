@@ -1,36 +1,35 @@
-export enum Role {
-  ROOT = "ROOT",
-  ADMIN = "ADMIN",
-  USER = "USER",
-  SERVICE = "SERVICE",
+interface ID {
+  $oid: string;
 }
 
-export interface Command {
-  uuid?: string;
-  command?: string;
-  endpoint?: string;
-  description?: string;
-  isEnabled?: boolean;
-  apiKey?: string;
-  createdAt?: number;
-  updatedAt?: number;
-}
-
-export interface Group {
-  uuid?: string | number;
-  id?: string | number;
-  title?: string;
-  users?: Array<string>;
-  createdAt?: number;
-  updatedAt?: number;
+interface AtedAt {
+  $date: Date;
 }
 
 export interface User {
-  uuid?: string | number;
-  id?: string | number;
-  username?: string;
-  apiKey?: string | undefined | null;
-  role?: Role;
-  createdAt?: number;
-  updatedAt?: number;
+  _id?: ID | string;
+  id: string;
+  username: string;
+  firstname?: string;
+  lastname?: string;
+  qrPathId?: string;
+  createdAt?: AtedAt | string;
+  updatedAt?: AtedAt | string;
+}
+
+export interface Crew {
+  _id?: ID | string;
+  name: string;
+  members: Array<ID | string>;
+  createdAt?: AtedAt | string;
+  updatedAt?: AtedAt | string;
+}
+
+export interface Command {
+  _id?: ID | string;
+  key: string;
+  url: string;
+  enabled: boolean;
+  createdAt?: AtedAt | string;
+  updatedAt?: AtedAt | string;
 }

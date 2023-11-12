@@ -1,15 +1,21 @@
 import { APIGatewayEvent, Callback, Context } from "aws-lambda";
-import { OK, BAD_REQUEST } from "http-status";
+import { OK, BAD_REQUEST, NOT_MODIFIED } from "http-status";
 import { TelegramService } from "../../lib/services/telegram";
 
-export const execute = async (
+const execute = async (
   url: string
 ): Promise<{ statusCode: number; body?: string }> => {
   if (!url.trim()) {
     return { statusCode: BAD_REQUEST };
   }
 
+  TelegramService.initInstance();
+
   const webhookOld = await TelegramService.getWebhookInfo();
+  if (webhookOld?.data?.result?.url === url) {
+    return { statusCode: NOT_MODIFIED };
+  }
+
   await TelegramService.setWebhook(url);
 
   const response = JSON.stringify({
@@ -22,9 +28,11 @@ export const execute = async (
 
 export const telegramSetWebhook = async (
   event: APIGatewayEvent,
-  _context: Context,
+  context: Context,
   callback: Callback
 ): Promise<void> => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
   if (!event?.body) {
     return callback(null, { statusCode: BAD_REQUEST });
   }

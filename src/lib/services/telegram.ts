@@ -20,7 +20,7 @@ interface GetWebhookInfoResponse {
   };
 }
 
-interface SendMessageParams {
+export interface SendMessageParams {
   chat_id: number | string;
   text: string;
   message_thread_id?: number;
@@ -56,21 +56,18 @@ export class TelegramService {
   public static setWebhook(
     url: string
   ): Promise<AxiosResponse<SetWebhookResponse>> {
-    TelegramService.initInstance();
     return TelegramService.instance.post("/setWebhook", { url });
   }
 
   public static getWebhookInfo(): Promise<
     AxiosResponse<GetWebhookInfoResponse>
   > {
-    TelegramService.initInstance();
     return TelegramService.instance.get("/getWebhookInfo");
   }
 
   public static sendMessage(
     params: SendMessageParams
   ): Promise<AxiosResponse<SendMessageResponse>> {
-    TelegramService.initInstance();
     return TelegramService.instance.post("/sendMessage", params);
   }
 }

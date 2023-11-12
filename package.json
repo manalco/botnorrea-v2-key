@@ -1,5 +1,5 @@
 {
-  "name": "botnorrea-v2",
+  "name": "botnorrea-v2-telegram",
   "version": "1.0.0",
   "description": "Botnorrea v2 core",
   "main": "index.js",
@@ -9,21 +9,23 @@
     "dev:deploy": "sls deploy --stage dev --verbose",
     "dev:destroy": "sls remove --stage dev --verbose",
     "local:telegramSetWebhook": "sls invoke local -f telegramSetWebhook -p mock_events/event_telegram_set_webhook.json --stage dev",
-    "local:telegramWebhook": "sls invoke local -f telegramWebhook -p mock_events/event_telegram_webhook.json --stage dev"
+    "local:telegramWebhook": "sls invoke local -f telegramWebhook -p mock_events/event_telegram_webhook.json --stage dev",
+    "local:telegramSendMessage": "sls invoke local -f telegramSendMessage -p mock_events/event_telegram_send_message.json --stage dev",
+    "local:telegramDebug": "sls invoke local -f telegramDebug -p mock_events/event_telegram_debug.json --stage dev"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jotacemarin/botnorrea-v2.git"
+    "url": "git+https://github.com/jotacemarin/botnorrea-v2-telegram.git"
   },
   "keywords": [
-    "botnorrea-v2"
+    "botnorrea-v2-telegram"
   ],
   "author": "jotacemarin@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jotacemarin/botnorrea-v2/issues"
+    "url": "https://github.com/jotacemarin/botnorrea-v2-telegram/issues"
   },
-  "homepage": "https://github.com/jotacemarin/botnorrea-v2#readme",
+  "homepage": "https://github.com/jotacemarin/botnorrea-v2-telegram#readme",
   "jest": {
     "coveragePathIgnorePatterns": [
       "src/services/telegram"
@@ -40,8 +42,12 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "3.388.0",
     "@aws-sdk/lib-dynamodb": "3.388.0",
+    "@xenova/transformers": "^2.8.0",
     "axios": "1.4.0",
-    "http-status": "1.6.2"
+    "http-status": "1.6.2",
+    "mongoose": "^8.0.0",
+    "onnxruntime-node": "^1.16.2",
+    "transformers.ts": "^1.0.2"
   },
   "devDependencies": {
     "@babel/preset-env": "7.22.10",

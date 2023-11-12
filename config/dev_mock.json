@@ -1,6 +1,6 @@
 {
   "service": {
-    "name": "botnorrea-v2"
+    "name": "botnorrea-v2-telegram"
   },
   "provider": {
     "name": "aws",
@@ -10,9 +10,10 @@
     "environment": {
       "BOT_NAME": "botnorrea-v2",
       "TELEGRAM_BOT_TOKEN": "",
-      "DYNAMODB_TABLE_USERS": "Users",
-      "DYNAMODB_TABLE_GROUPS": "Groups",
-      "DYNAMODB_TABLE_COMMANDS": "Commands"
+      "MONGO_USER": "",
+      "MONGO_PASSWORD": "",
+      "MONGO_HOST": "",
+      "MONGO_DATABASE": ""
     }
   }
 }

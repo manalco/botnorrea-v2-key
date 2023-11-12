@@ -1,4 +1,4 @@
-name: ci-botnorrea-v2
+name: ci-botnorrea-v2-telegram
 
 on:
   pull_request:

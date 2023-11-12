@@ -1,0 +1,6 @@
+{
+  "headers": {
+    "Authorization": "xxxxx"
+  },
+  "body": "{\"chat_id\": 1346557085, \"text\": \"test from postma\"}"
+}

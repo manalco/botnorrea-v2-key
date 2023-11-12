@@ -1,17 +1,17 @@
 import { EntityTypeTg, UpdateTg } from "../models";
 
-export const filterCommandEntity = ({ type, offset }) =>
+const filterTextCommandEntity = ({ type, offset }) =>
   type === EntityTypeTg.BOT_COMMAND && offset === 0;
 
-export const checkIfHasCommand = (body: UpdateTg) => {
-  const commands = body?.message?.entities?.filter(filterCommandEntity);
+const checkIfHasTextCommand = (body: UpdateTg) => {
+  const commands = body?.message?.entities?.filter(filterTextCommandEntity);
   return Boolean(commands?.length);
 };
 
-export const getCommandPosition = (
+const getTextCommandPosition = (
   body: UpdateTg
 ): { offset: number; length: number } => {
-  const commands = body?.message?.entities?.filter(filterCommandEntity);
+  const commands = body?.message?.entities?.filter(filterTextCommandEntity);
   if (!commands?.length) {
     return { offset: 0, length: 0 };
   }
@@ -20,7 +20,7 @@ export const getCommandPosition = (
   return { offset, length };
 };
 
-export const getCommandKey = (
+const getTextCommandKey = (
   body: UpdateTg,
   position: { offset: number; length: number }
 ) => {
@@ -32,14 +32,14 @@ export const getCommandKey = (
   return key?.trim();
 };
 
-export const getCommand = (body: UpdateTg): null | string => {
-  const hasCommand = checkIfHasCommand(body);
-  if (!hasCommand) {
+export const getTextCommand = (body: UpdateTg): null | string => {
+  const hasTextCommand = checkIfHasTextCommand(body);
+  if (!hasTextCommand) {
     return null;
   }
 
-  const position = getCommandPosition(body);
-  const key = getCommandKey(body, position);
+  const position = getTextCommandPosition(body);
+  const key = getTextCommandKey(body, position);
   if (key === "") {
     return null;
   }

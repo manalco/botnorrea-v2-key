@@ -44,5 +44,12 @@ export interface UpdateTg {
     date: number;
     text: string;
     entities?: Array<EntityTg>;
+    reply_to_message: {
+      message_id: number;
+      from: UserTg;
+      chat: ChatTg;
+      date: string;
+      text: string;
+    };
   };
 }
