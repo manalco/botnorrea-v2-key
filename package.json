@@ -38,14 +38,9 @@
     }
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "3.388.0",
-    "@aws-sdk/lib-dynamodb": "3.388.0",
-    "@xenova/transformers": "^2.8.0",
     "axios": "1.4.0",
     "http-status": "1.6.2",
-    "mongoose": "^8.0.0",
-    "onnxruntime-node": "^1.16.2",
-    "transformers.ts": "^1.0.2"
+    "mongoose": "8.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "7.22.10",
