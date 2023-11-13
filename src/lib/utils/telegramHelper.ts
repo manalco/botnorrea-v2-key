@@ -11,7 +11,11 @@ const checkIfHasTextCommand = (body: UpdateTg) => {
 const getTextCommandPosition = (
   body: UpdateTg
 ): { offset: number; length: number } => {
-  const commands = body?.message?.entities?.filter(filterTextCommandEntity);
+  const entities = body?.message?.entities ?? [];
+  const caption_entities = body?.message?.caption_entities ?? [];
+  const commands = [...entities, ...caption_entities]?.filter(
+    filterTextCommandEntity
+  );
   if (!commands?.length) {
     return { offset: 0, length: 0 };
   }

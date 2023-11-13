@@ -1,24 +1,7 @@
 import axios, { AxiosResponse, AxiosInstance } from "axios";
 import { EntityTg, UserTg, FormattingOptionsTg } from "../models";
 
-const { TELEGRAM_BOT_TOKEN } = process.env;
-
-interface SetWebhookResponse {
-  ok: boolean;
-  result: boolean;
-  description: string;
-}
-
-interface GetWebhookInfoResponse {
-  ok: boolean;
-  result: {
-    url: string;
-    has_custom_certificate: boolean;
-    pending_update_count: number;
-    max_connections: number;
-    ip_address: string;
-  };
-}
+const { TELEGRAM_SEND_MESSAGE_URL } = process.env;
 
 export interface SendMessageParams {
   chat_id: number | string;
@@ -31,6 +14,18 @@ export interface SendMessageParams {
   reply_markup?: any;
 }
 
+export interface SendPhotoParams {
+  chat_id: number | string;
+  photo: string;
+  caption?: string;
+  parse_mode?: FormattingOptionsTg;
+  caption_entities?: Array<EntityTg>;
+  reply_to_message_id?: number;
+  allow_sending_without_reply?: boolean;
+  protect_content?: boolean;
+  reply_markup?: any;
+}
+
 interface SendMessageResponse {
   message_id: number;
   message_thread_id: number;
@@ -40,7 +35,8 @@ interface SendMessageResponse {
   entities: Array<EntityTg>;
 }
 
-export class TelegramService {
+
+export class BotnorreaService {
   private static instance: AxiosInstance;
 
   private constructor() {}
@@ -48,26 +44,20 @@ export class TelegramService {
   public static initInstance(): void {
     if (!this.instance) {
       this.instance = axios.create({
-        baseURL: `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`,
+        baseURL: `${TELEGRAM_SEND_MESSAGE_URL}`,
       });
     }
-  }
-
-  public static setWebhook(
-    url: string
-  ): Promise<AxiosResponse<SetWebhookResponse>> {
-    return TelegramService.instance.post("/setWebhook", { url });
-  }
-
-  public static getWebhookInfo(): Promise<
-    AxiosResponse<GetWebhookInfoResponse>
-  > {
-    return TelegramService.instance.get("/getWebhookInfo");
   }
 
   public static sendMessage(
     params: SendMessageParams
   ): Promise<AxiosResponse<SendMessageResponse>> {
-    return TelegramService.instance.post("/sendMessage", params);
+    return BotnorreaService.instance.post("/send-message", params);
+  }
+
+  public static sendPhoto(
+    params: SendPhotoParams
+  ): Promise<AxiosResponse<SendMessageResponse>> {
+    return BotnorreaService.instance.post("/send-photo", params);
   }
 }

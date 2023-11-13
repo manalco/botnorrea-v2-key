@@ -1,31 +1,29 @@
 {
-  "name": "botnorrea-v2-telegram",
+  "name": "botnorrea-v2-qr",
   "version": "1.0.0",
-  "description": "Botnorrea v2 core",
+  "description": "Botnorrea v2 core: qr functions",
   "main": "index.js",
   "scripts": {
     "test": "jest",
     "coverage": "jest --coverage",
     "dev:deploy": "sls deploy --stage dev --verbose",
     "dev:destroy": "sls remove --stage dev --verbose",
-    "local:telegramSetWebhook": "sls invoke local -f telegramSetWebhook -p mock_events/event_telegram_set_webhook.json --stage dev",
-    "local:telegramWebhook": "sls invoke local -f telegramWebhook -p mock_events/event_telegram_webhook.json --stage dev",
-    "local:telegramSendMessage": "sls invoke local -f telegramSendMessage -p mock_events/event_telegram_send_message.json --stage dev",
-    "local:telegramDebug": "sls invoke local -f telegramDebug -p mock_events/event_telegram_debug.json --stage dev"
+    "local:qrGet": "sls invoke local -f qr -p mock_events/event_qr_get.json --stage dev",
+    "local:qrUpdate": "sls invoke local -f qr -p mock_events/event_qr_update.json --stage dev"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jotacemarin/botnorrea-v2-telegram.git"
+    "url": "git+https://github.com/jotacemarin/botnorrea-v2-qr.git"
   },
   "keywords": [
-    "botnorrea-v2-telegram"
+    "botnorrea-v2-qr"
   ],
   "author": "jotacemarin@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jotacemarin/botnorrea-v2-telegram/issues"
+    "url": "https://github.com/jotacemarin/botnorrea-v2-qr/issues"
   },
-  "homepage": "https://github.com/jotacemarin/botnorrea-v2-telegram#readme",
+  "homepage": "https://github.com/jotacemarin/botnorrea-v2-qr#readme",
   "jest": {
     "coveragePathIgnorePatterns": [
       "src/services/telegram"

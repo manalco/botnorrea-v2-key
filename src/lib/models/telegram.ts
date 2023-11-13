@@ -35,21 +35,36 @@ export interface EntityTg {
   type: EntityTypeTg;
 }
 
+export interface ReplyToMessageTg {
+  message_id: number;
+  from: UserTg;
+  chat: ChatTg;
+  date: string;
+  text: string;
+}
+
+export interface PhotoSizeTg {
+  file_id: string;
+  file_unique_id: string;
+  width: number;
+  height: number;
+  file_size: number;
+}
+
+export interface MessageTg {
+  message_id: number;
+  from: UserTg;
+  chat: ChatTg;
+  date: number;
+  text: string;
+  caption: string;
+  entities?: Array<EntityTg>;
+  caption_entities?: Array<EntityTg>;
+  reply_to_message: ReplyToMessageTg;
+  photo: Array<PhotoSizeTg>;
+}
+
 export interface UpdateTg {
   update_id: number;
-  message: {
-    message_id: number;
-    from: UserTg;
-    chat: ChatTg;
-    date: number;
-    text: string;
-    entities?: Array<EntityTg>;
-    reply_to_message: {
-      message_id: number;
-      from: UserTg;
-      chat: ChatTg;
-      date: string;
-      text: string;
-    };
-  };
+  message: MessageTg;
 }
