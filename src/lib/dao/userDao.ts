@@ -9,6 +9,10 @@ export class UserDao {
 
   private constructor() {}
 
+  public static getSchemaName(): string {
+    return UserDao.schemaName;
+  }
+
   public static async initInstance() {
     await MongodbService.initInstance();
 
@@ -30,6 +34,24 @@ export class UserDao {
     if (!UserDao.userModel) {
       UserDao.userModel = model(UserDao.schemaName, UserDao.userSchema);
     }
+  }
+
+  public static async findByTelegramId(id: number): Promise<User | null> {
+    const document = await UserDao.userModel.findOne({ id }).exec();
+    if (document) {
+      return { ...document.toObject() } as User;
+    }
+
+    return null;
+  }
+
+  public static async findByUsernames(
+    usernames: Array<string>
+  ): Promise<Array<User>> {
+    const $or = usernames?.map((username: string) => ({
+      username: username?.replace("@", "").trim(),
+    }));
+    return UserDao.userModel.find({ $or }).exec();
   }
 
   public static async findByUsername(username: string): Promise<User | null> {
