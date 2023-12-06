@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosInstance } from "axios";
 import { EntityTg, UserTg, FormattingOptionsTg } from "../models";
 
-const { TELEGRAM_SEND_MESSAGE_URL } = process.env;
+const { TELEGRAM_SEND_MESSAGE_URL, CLIENT_ID, CLIENT_SECRET } = process.env;
 
 export interface SendMessageParams {
   chat_id: number | string;
@@ -10,7 +10,7 @@ export interface SendMessageParams {
   parse_mode?: FormattingOptionsTg;
   entities?: Array<EntityTg>;
   protect_content?: boolean;
-  reply_to_message_id?: number;
+  reply_to_message_id?: number | number;
   reply_markup?: any;
 }
 
@@ -20,7 +20,7 @@ export interface SendPhotoParams {
   caption?: string;
   parse_mode?: FormattingOptionsTg;
   caption_entities?: Array<EntityTg>;
-  reply_to_message_id?: number;
+  reply_to_message_id?: number | string;
   allow_sending_without_reply?: boolean;
   protect_content?: boolean;
   reply_markup?: any;
@@ -35,7 +35,6 @@ interface SendMessageResponse {
   entities: Array<EntityTg>;
 }
 
-
 export class BotnorreaService {
   private static instance: AxiosInstance;
 
@@ -45,6 +44,9 @@ export class BotnorreaService {
     if (!this.instance) {
       this.instance = axios.create({
         baseURL: `${TELEGRAM_SEND_MESSAGE_URL}`,
+        headers: {
+          Authorization: `Basic ${btoa(`${CLIENT_ID}::${CLIENT_SECRET}`)}`,
+        },
       });
     }
   }
@@ -55,7 +57,7 @@ export class BotnorreaService {
     return BotnorreaService.instance.post("/send-message", params);
   }
 
-  public static sendPhoto(
+  public static async sendPhoto(
     params: SendPhotoParams
   ): Promise<AxiosResponse<SendMessageResponse>> {
     return BotnorreaService.instance.post("/send-photo", params);

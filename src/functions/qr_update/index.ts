@@ -7,7 +7,6 @@ import {
   INTERNAL_SERVER_ERROR,
 } from "http-status";
 import { UpdateTg } from "../../lib/models";
-import { getTextCommand } from "../../lib/utils/telegramHelper";
 import { UserDao } from "../../lib/dao/userDao";
 import { BotnorreaService } from "../../lib/services/botnorrea";
 
@@ -18,44 +17,6 @@ const sendMessage = async (body: UpdateTg, text: string): Promise<void> => {
     reply_to_message_id: body?.message?.message_id,
   });
   return;
-};
-
-const sendPhoto = async (
-  body: UpdateTg,
-  qrPathId: string | undefined
-): Promise<{ statusCode: number }> => {
-  if (!qrPathId) {
-    await sendMessage(body, "Qr not found");
-    return { statusCode: NOT_FOUND };
-  }
-
-  await BotnorreaService.sendPhoto({
-    chat_id: body?.message?.chat?.id,
-    photo: qrPathId,
-    reply_to_message_id: body?.message?.message_id,
-  });
-  return { statusCode: OK };
-};
-
-const getQr = async (body: UpdateTg): Promise<string | undefined> => {
-  const key = getTextCommand(body);
-  if (!key) {
-    return;
-  }
-
-  const [username] = body?.message?.text
-    ?.replace(key, "")
-    ?.replace("@", "")
-    ?.toLowerCase()
-    ?.trim()
-    ?.split(" ");
-
-  const user = await UserDao.findByUsername(username);
-  if (!user?.qrPathId) {
-    return;
-  }
-
-  return user.qrPathId;
 };
 
 const updateQr = async (body: UpdateTg): Promise<{ statusCode: number }> => {
@@ -85,15 +46,10 @@ const execute = async (body: UpdateTg): Promise<{ statusCode: number }> => {
     return updateQr(body);
   }
 
-  if (body?.message?.text) {
-    const qrPathId = await getQr(body);
-    return sendPhoto(body, qrPathId);
-  }
-
   return { statusCode: NO_CONTENT };
 };
 
-export const qr = async (
+export const qrUpdate = async (
   event: APIGatewayEvent,
   context: Context,
   callback: Callback

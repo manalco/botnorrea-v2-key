@@ -72,8 +72,14 @@ export class UserDao {
       throw new Error("username is missing");
     }
 
-    await UserDao.userModel.updateOne({ id: user.id }, user, { upsert: true });
+    try {
+      await UserDao.userModel.updateOne({ id: user.id }, user, {
+        upsert: true,
+      });
 
-    return UserDao.findByUsername(user?.username);
+      return UserDao.findByUsername(user?.username);
+    } catch (error) {
+      throw error;
+    }
   }
 }

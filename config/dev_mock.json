@@ -10,6 +10,8 @@
     "environment": {
       "BOT_NAME": "botnorrea-v2",
       "TELEGRAM_SEND_MESSAGE_URL": "",
+      "CLIENT_ID": "",
+      "CLIENT_SECRET": "",
       "MONGO_USER": "",
       "MONGO_PASSWORD": "",
       "MONGO_HOST": "",
