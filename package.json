@@ -8,6 +8,8 @@
     "coverage": "jest --coverage",
     "dev:deploy": "sls deploy --stage dev --verbose",
     "dev:destroy": "sls remove --stage dev --verbose",
+    "prod:deploy": "sls deploy --stage prod --verbose",
+    "prod:destroy": "sls remove --stage prod --verbose",
     "local:qr": "sls invoke local -f qr -p mock_events/event_qr_get.json --stage dev",
     "local:qrUpdate": "sls invoke local -f qrUpdate -p mock_events/event_qr_update.json --stage dev"
   },
