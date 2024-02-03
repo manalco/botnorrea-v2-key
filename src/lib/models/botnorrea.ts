@@ -8,7 +8,7 @@ interface AtedAt {
 
 export interface User {
   _id?: ID | string;
-  id: string;
+  id: number | string;
   username: string;
   firstname?: string;
   lastname?: string;
@@ -20,7 +20,7 @@ export interface User {
 export interface Crew {
   _id?: ID | string;
   name: string;
-  members: Array<User | string>;
+  members: Array<User>;
   createdAt?: AtedAt | string;
   updatedAt?: AtedAt | string;
 }

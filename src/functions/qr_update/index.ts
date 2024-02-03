@@ -7,12 +7,12 @@ import {
   INTERNAL_SERVER_ERROR,
 } from "http-status";
 import { UpdateTg } from "../../lib/models";
-import { UserDao } from "../../lib/dao/userDao";
-import { BotnorreaService } from "../../lib/services/botnorrea";
+import { UserDao } from "../../lib/dao";
+import { BotnorreaService } from "../../lib/services";
 
 const sendMessage = async (body: UpdateTg, text: string): Promise<void> => {
   await BotnorreaService.sendMessage({
-    chat_id: body?.message?.chat?.id,
+    chat_id: body?.message!.chat?.id,
     text,
     reply_to_message_id: body?.message?.message_id,
   });
@@ -20,11 +20,11 @@ const sendMessage = async (body: UpdateTg, text: string): Promise<void> => {
 };
 
 const updateQr = async (body: UpdateTg): Promise<{ statusCode: number }> => {
-  const [photo] = body?.message?.photo?.sort(
+  const [photo] = body?.message!.photo?.sort(
     (first, last) => last.file_size - first.file_size
   );
 
-  const user = await UserDao.findByUsername(body?.message?.from?.username);
+  const user = await UserDao.findByUsername(body?.message!.from?.username);
   if (!user) {
     return { statusCode: NOT_FOUND };
   }
