@@ -55,7 +55,9 @@ export class UserDao {
   }
 
   public static async findByUsername(username: string): Promise<User | null> {
-    const document = await UserDao.userModel.findOne({ username }).exec();
+    const document = await UserDao.userModel
+      .findOne({ username: { $regex: new RegExp(username, "i") } })
+      .exec();
     if (document) {
       return { ...document.toObject() } as User;
     }
