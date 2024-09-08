@@ -43,6 +43,11 @@ const getQr = async (body: UpdateTg): Promise<string | undefined> => {
     return;
   }
 
+  if (body?.message?.text === key) {
+    const self = await UserDao.findByUsername(body?.message?.from?.username);
+    return self?.qrPathId;
+  }
+
   const [username] = body
     ?.message!.text?.replace(key, "")
     ?.replace("@", "")
@@ -51,11 +56,7 @@ const getQr = async (body: UpdateTg): Promise<string | undefined> => {
     ?.split(" ");
 
   const user = await UserDao.findByUsername(username);
-  if (!user?.qrPathId) {
-    return;
-  }
-
-  return user.qrPathId;
+  return user?.qrPathId;
 };
 
 const updateQr = async (body: UpdateTg): Promise<{ statusCode: number }> => {
