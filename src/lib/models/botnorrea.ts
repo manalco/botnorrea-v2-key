@@ -12,7 +12,7 @@ export interface User {
   username: string;
   firstname?: string;
   lastname?: string;
-  qrPathId?: string;
+  key?: string;
   createdAt?: AtedAt | string;
   updatedAt?: AtedAt | string;
 }

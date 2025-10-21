@@ -7,7 +7,6 @@ import {
   INTERNAL_SERVER_ERROR,
 } from "http-status";
 import { UpdateTg } from "../../lib/models";
-import { getTextCommand } from "../../lib/utils/telegramHelper";
 import { UserDao } from "../../lib/dao";
 import { BotnorreaService } from "../../lib/services";
 
@@ -20,57 +19,16 @@ const sendMessage = async (body: UpdateTg, text: string): Promise<void> => {
   return;
 };
 
-const sendPhoto = async (
-  body: UpdateTg,
-  qrPathId: string | undefined
-): Promise<{ statusCode: number }> => {
-  if (!qrPathId) {
-    await sendMessage(body, "Qr not found");
-    return { statusCode: NOT_FOUND };
-  }
-
-  await BotnorreaService.sendPhoto({
-    chat_id: body?.message!.chat?.id,
-    photo: qrPathId,
-    reply_to_message_id: body?.message?.message_id,
-  });
-  return { statusCode: OK };
-};
-
-const getQr = async (body: UpdateTg): Promise<string | undefined> => {
-  const key = getTextCommand(body);
-  if (!key) {
-    return;
-  }
-
-  if (body?.message?.text === key) {
-    const self = await UserDao.findByUsername(body?.message?.from?.username);
-    return self?.qrPathId;
-  }
-
-  const [username] = body
-    ?.message!.text?.replace(key, "")
-    ?.replace("@", "")
-    ?.toLowerCase()
-    ?.trim()
-    ?.split(" ");
-
-  const user = await UserDao.findByUsername(username);
-  return user?.qrPathId;
-};
-
-const updateQr = async (body: UpdateTg): Promise<{ statusCode: number }> => {
-  const [photo] = body?.message!.photo?.sort(
-    (first, last) => last.file_size - first.file_size
-  );
+const updateKey = async (body: UpdateTg): Promise<{ statusCode: number }> => {
+  const [key] = body?.message!.text?.split(" ")[1];
 
   const user = await UserDao.findByUsername(body?.message!.from?.username);
   if (!user) {
     return { statusCode: NOT_FOUND };
   }
 
-  await UserDao.save({ ...user, qrPathId: photo.file_id });
-  await sendMessage(body, "Qr updated successfully");
+  await UserDao.save({ ...user, key: key });
+  await sendMessage(body, "Key updated successfully");
   return { statusCode: OK };
 };
 
@@ -83,18 +41,13 @@ const execute = async (body: UpdateTg): Promise<{ statusCode: number }> => {
   }
 
   if (body?.message?.photo) {
-    return updateQr(body);
-  }
-
-  if (body?.message?.text) {
-    const qrPathId = await getQr(body);
-    return sendPhoto(body, qrPathId);
+    return updateKey(body);
   }
 
   return { statusCode: NO_CONTENT };
 };
 
-export const qr = async (
+export const keyUpdate = async (
   event: APIGatewayEvent,
   context: Context,
   callback: Callback

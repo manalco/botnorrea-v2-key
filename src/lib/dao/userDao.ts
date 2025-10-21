@@ -23,7 +23,7 @@ export class UserDao {
           username: { type: String, unique: true, index: "text" },
           firstname: { type: String, index: "text" },
           lastname: { type: String, index: "text" },
-          qrPathId: { type: String, index: "text" },
+          key: { type: String, index: "text" },
         },
         {
           timestamps: true,

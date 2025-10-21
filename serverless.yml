@@ -28,5 +28,5 @@ provider:
     PASSWORD: ${self:custom.secrets.provider.environment.PASSWORD}
 
 functions:
-  qr: ${file(./src/functions/qr/function.yml)}
-  qrUpdate: ${file(./src/functions/qr_update/function.yml)}
+  key: ${file(./src/functions/key/function.yml)}
+  keyUpdate: ${file(./src/functions/key_update/function.yml)}

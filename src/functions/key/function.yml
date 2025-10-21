@@ -1,11 +1,11 @@
-name: ${self:custom.secrets.service.name}-${self:custom.secrets.provider.stage}-qr-update
-handler: index.qrUpdate
+name: ${self:custom.secrets.service.name}-${self:custom.secrets.provider.stage}-key
+handler: index.key
 memorySize: 128
 timeout: 30
 reservedConcurrency: 5
 events: 
   - http: 
-      path: /${self:custom.secrets.service.name}-${self:custom.secrets.provider.stage}/qr/update
+      path: /${self:custom.secrets.service.name}-${self:custom.secrets.provider.stage}/key
       method: POST
       # request:
       #   parameters:

@@ -1,2 +1,2 @@
-export { qr } from "./src/functions/qr";
-export { qrUpdate } from "./src/functions/qr_update";
+export { key } from "./src/functions/key";
+export { keyUpdate } from "./src/functions/key_update";

@@ -1,6 +1,6 @@
 {
   "service": {
-    "name": "botnorrea-v2-qr"
+    "name": "botnorrea-v2-key"
   },
   "provider": {
     "name": "aws",

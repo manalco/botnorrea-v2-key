@@ -1,7 +1,7 @@
 {
-  "name": "botnorrea-v2-qr",
+  "name": "botnorrea-v2-key",
   "version": "1.0.0",
-  "description": "Botnorrea v2 core: qr functions",
+  "description": "Botnorrea v2 core: key functions",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -10,22 +10,22 @@
     "dev:destroy": "sls remove --stage dev --verbose",
     "prod:deploy": "sls deploy --stage prod --verbose",
     "prod:destroy": "sls remove --stage prod --verbose",
-    "local:qr": "sls invoke local -f qr -p mock_events/event_qr_get.json --stage dev",
-    "local:qrUpdate": "sls invoke local -f qrUpdate -p mock_events/event_qr_update.json --stage dev"
+    "local:key": "sls invoke local -f key -p mock_events/event_key_get.json --stage dev",
+    "local:keyUpdate": "sls invoke local -f keyUpdate -p mock_events/event_key_update.json --stage dev"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jotacemarin/botnorrea-v2-qr.git"
+    "url": "git+https://github.com/jotacemarin/botnorrea-v2-key.git"
   },
   "keywords": [
-    "botnorrea-v2-qr"
+    "botnorrea-v2-key"
   ],
   "author": "jotacemarin@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jotacemarin/botnorrea-v2-qr/issues"
+    "url": "https://github.com/jotacemarin/botnorrea-v2-key/issues"
   },
-  "homepage": "https://github.com/jotacemarin/botnorrea-v2-qr#readme",
+  "homepage": "https://github.com/jotacemarin/botnorrea-v2-key#readme",
   "jest": {
     "coveragePathIgnorePatterns": [
       "src/services/telegram"
